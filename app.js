@@ -186,7 +186,7 @@
     f.pr.revealed[f.pos] = true;
     touch(f.pr); persistProgress(); route();
     var explanation = $('#focusTrans');
-    if (explanation && explanation.getBoundingClientRect().top > window.innerHeight - 120) explanation.scrollIntoView({behavior:'smooth',block:'center'});
+    if (explanation && explanation.getBoundingClientRect().top > window.innerHeight - 120) explanation.scrollIntoView({behavior:'smooth',block:'start'});
   }
   function focusNext() {
     var f = focusState(); if (!f) return;
@@ -217,7 +217,7 @@
     f.pr.pos = Math.max(0, f.pos - 1);
     touch(f.pr); persistProgress(); route();
   }
-  /* 先展开注解，已展开则进下一段；读完后进入下一品 */
+  /* 先展开白话，已展开则进下一段；读完后进入下一品 */
   function focusAdvance() {
     var f = focusState(); if (!f) return;
     if (f.pos >= f.sec.pairs.length) {
@@ -420,28 +420,28 @@
   function renderHome(view) {
     var ov=overallStats(),last=load(LS.last,null);
     var entry=last&&BOOK.chapters[last.ci]&&BOOK.chapters[last.ci].sections[last.si]?last:firstUnreadSection();
-    var html='<section class="hero sutra-hero"><div class="hero-copy"><div class="eyebrow">'+escapeHtml(CONFIG.notebookName)+' <span> / </span> 十三品 · 三卷</div><h1>地藏菩萨<br><span class="title-rest">本愿经</span></h1><div class="edition-label">原典 · 逐段注解 · 名词释义</div><div class="tagline">'+escapeHtml(CONFIG.tagline)+'</div><p class="lead">'+escapeHtml(CONFIG.description)+'</p><div class="hero-actions">'+resumeButton(entry,true,last?'继续上次阅读':'从第一品读起')+'<a class="quiet-link" href="#/guide">读经之前 ↗</a></div></div><div class="hero-art" aria-hidden="true"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><span class="art-top">愿 · 行</span>'+lotus()+'<span class="art-bottom">慈悲 · 智慧 · 回向</span><span class="art-stamp">本愿</span></div></section>';
+    var html='<section class="hero sutra-hero"><div class="hero-copy"><div class="eyebrow">'+escapeHtml(CONFIG.notebookName)+' <span> / </span> 十三品 · 三卷</div><h1>地藏菩萨<br><span class="title-rest">本愿经</span></h1><div class="edition-label">原典 · 完整白话 · 阅读提示</div><div class="tagline">'+escapeHtml(CONFIG.tagline)+'</div><p class="lead">'+escapeHtml(CONFIG.description)+'</p><div class="hero-actions">'+resumeButton(entry,true,last?'继续上次阅读':'从第一品读起')+'<a class="quiet-link" href="#/guide">读经之前 ↗</a></div></div><div class="hero-art" aria-hidden="true"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><span class="art-top">愿 · 行</span>'+lotus()+'<span class="art-bottom">慈悲 · 智慧 · 回向</span><span class="art-stamp">本愿</span></div></section>';
     html+='<div class="reading-summary"><div><span class="summary-label">我的阅读</span><strong>'+ov.done+'<small> / 13 品已读完</small></strong></div><div class="summary-progress"><div class="bar"><i style="width:'+ov.pct+'%"></i></div><span>'+ov.pct+'% · 一段经文，一点体会</span></div><a href="#/mynotes">查看札记 →</a></div>';
     html+='<section class="catalog"><header class="catalog-head"><div><span class="eyebrow">KṢITIGARBHA · ORIGINAL VOWS</span><h2>十三品目录</h2></div><label class="catalog-search"><span aria-hidden="true">⌕</span><input id="chapterFilter" type="search" aria-label="查找品名或主题" placeholder="查找品名、布施、回向…"></label></header>';
     html+='<div class="catalog-filters" role="group" aria-label="经卷范围"><button class="chip on" data-catalog="all" aria-pressed="true">全经 · 13</button><button class="chip" data-catalog="0" aria-pressed="false">卷上 · 4</button><button class="chip" data-catalog="1" aria-pressed="false">卷中 · 5</button><button class="chip" data-catalog="2" aria-pressed="false">卷下 · 4</button><span>依经次第</span></div><div class="chapter-catalog">';
     flatSections().forEach(function(e){var sec=e.sec,p=progress[sec.id]||{},done=p.done;
       html+='<a class="sutra-card" data-ci="'+e.ci+'" data-keywords="'+escapeAttr(sec.number+' '+sec.title+' '+sec.theme+' '+sec.intro)+'" href="#/read/'+e.ci+'/'+e.si+'"><div class="card-number">'+String(sec.number).padStart(2,'0')+'</div><div class="card-copy"><div class="card-top"><span>'+escapeHtml(e.ch.title)+' · '+sec.pairs.length+' 段</span><span>'+(done?'已读完 ✓':'')+'</span></div><h3>'+escapeHtml(sec.name)+'</h3><p>'+escapeHtml(sec.theme)+'</p></div><span class="card-arrow">↗</span></a>';
     });
-    html+='</div><p id="catalogEmpty" class="empty" hidden>没有找到这一品，试试「本愿」「布施」或「存亡」。</p><p class="catalog-count" id="catalogCount" aria-live="polite">共 13 品 · 153 段经文与注解</p></section>';
-    html+='<section class="reading-note"><span class="small-seal">愿</span><div><h3>愿有所依，行有所至。</h3><p>以通行三卷十三品经文为底本。注解帮助辨识名词与前后文，保留经文与解释的边界。读完一段，也可以记下一件愿意在生活中实践的善事。</p><a href="#/guide">经名、版本与注解说明 →</a></div></section>';
+    html+='</div><p id="catalogEmpty" class="empty" hidden>没有找到这一品，试试「本愿」「布施」或「存亡」。</p><p class="catalog-count" id="catalogCount" aria-live="polite">共 13 品 · 153 段经文与白话译文</p></section>';
+    html+='<section class="reading-note"><span class="small-seal">愿</span><div><h3>愿有所依，行有所至。</h3><p>以通行三卷十三品经文为底本。白话逐句展开原文意思，阅读提示补充背景与理解线索。读完一段，也可以记下一件愿意在生活中实践的善事。</p><a href="#/guide">经名、版本与注解说明 →</a></div></section>';
     view.innerHTML=html;
     var filter='all';function applyFilter(){var q=$('#chapterFilter').value.trim().toLowerCase(),count=0;$$('.sutra-card').forEach(function(c){c.hidden=!((filter==='all'||c.dataset.ci===filter)&&c.dataset.keywords.toLowerCase().includes(q));if(!c.hidden)count++;});$('#catalogEmpty').hidden=count>0;$('#catalogCount').textContent='共 '+count+' 品';}
     $('#chapterFilter').addEventListener('input',applyFilter);$$('[data-catalog]').forEach(function(b){b.addEventListener('click',function(){filter=b.dataset.catalog;$$('[data-catalog]').forEach(function(x){x.classList.toggle('on',x===b);x.setAttribute('aria-pressed',String(x===b));});applyFilter();});});
   }
 
   function renderGuide(view){
-    view.innerHTML='<div class="crumb"><a href="#/">目录</a> / 读经之前</div><header class="chapter-head"><div class="eyebrow">A NOTE BEFORE READING</div><h1>读懂经文，也照见自己的行。</h1><div class="ch-sub">经文、注解与个人札记，各有其位置。</div></header><div class="guide-content prose">'+
+    view.innerHTML='<div class="crumb"><a href="#/">目录</a> / 读经之前</div><header class="chapter-head"><div class="eyebrow">A NOTE BEFORE READING</div><h1>读懂经文，也照见自己的行。</h1><div class="ch-sub">经文、白话译文、阅读提示与个人札记，各有其位置。</div></header><div class="guide-content prose">'+
     '<h2>经名与内容</h2><p>本站采用通行经名《地藏菩萨本愿经》，民间也称《地藏经》。地藏菩萨常被尊称为地藏王菩萨，尊称与经典正式题名有所不同。传统题署为唐于阗国三藏沙门实叉难陀译；经的成立与译出问题在研究中存在讨论，题署不代表本项目完成了历史考证。</p>'+
     '<h2>全经的阅读脉络</h2><p><strong>卷上第一至第四品</strong>：法会缘起、地藏过去身的愿行，以及众生业缘。<strong>卷中第五至第九品</strong>：知苦止恶、礼敬修福、利益存亡、善知识与称佛名号。<strong>卷下第十至第十三品</strong>：布施回向、护法、见闻利益与佛的最后付嘱。</p><p>本版收录十三品正文的 153 个自然段，不将网页附带的炉香赞、净业真言、开经偈及卷末赞等课诵仪轨混入正文。通行课诵本常分三卷；大正藏 T0412 编为两卷，卷数差异不等于品数差异。</p>'+
     '<h2>原文从哪里来</h2><p>正文整理自<a href="https://zh.wikisource.org/wiki/地藏菩薩本願經" target="_blank" rel="noopener noreferrer">维基文库《地藏菩萨本愿经》三卷</a>，保留其段落和文字，并提供简体与来源繁体切换。每品有来源链接，便于核对。</p><p>曾与 CBETA 大正藏 T13 No.412 的十三品作去标点、简化字形后的文本比对；存在异体字、措辞及少量语句差异，未统一改写底本。本版不是校勘本，也不宣称文字无误。具体出处与处理方式见项目 SOURCES.md。</p>'+
-    '<h2>怎样使用注解</h2><p>每段配有段落标题与注解大意、义理线索；这是<strong>学习注解，不是逐字全译</strong>，也不是任何法师或宗派的正式讲记。名词可点红色词语查看，也可到「名词」汇总页查找。注解由 AI 辅助撰写，尚未经过佛教学者或法师逐条审定。</p><p>业报、地狱、神通、感应与功德利益，应放在佛教经典的信仰和劝修语境中理解。不可用来反向判定贫病、残障或遭难者的品德，也不可把诵持次数当作健康、财运或安全的保证。涉及病苦、临终和生产的段落，宗教关怀应尊重当事人意愿，并与现实照护并行。</p>'+
+    '<h2>怎样阅读白话与提示</h2><p>全经 153 段均配有<strong>完整白话译文</strong>，依原文次序翻译各句意思，保留叙事、问答、数字和清单，并对长段落重新分段，方便阅读。原有的概括、背景与解释放在译文下方可展开的「阅读提示」中。白话传达经文所述内容，阅读提示帮助理解语境，两者分开显示。名词可点红色词语查看，也可到「名词」汇总页查找。译文与提示由 AI 辅助撰写，不是法师或宗派的正式讲记，尚未经过佛教学者或法师逐条审定。</p><p>业报、地狱、神通、感应与功德利益，应放在佛教经典的信仰和劝修语境中理解。不可用来反向判定贫病、残障或遭难者的品德，也不可把诵持次数当作健康、财运或安全的保证。涉及病苦、临终和生产的段落，宗教关怀应尊重当事人意愿，并与现实照护并行。</p>'+
     '<h2>从阅读到实践</h2><p>可留意三条贯穿线索：由救亲扩展为普遍慈悲；从微小善根开始，反复修习而不退；把布施和善行回向更广大的众生。第十品的「下心含笑、软言慰谕」与第七品的「闻健自修」，尤其适合联系日常生活。</p>'+
-    '<h2>阅读与记录</h2><p>逐段模式下，点击经文或「看注解」展开解释；空格、右方向键前进，左方向键返回。可用段落目录直接跳转，也可切换通篇对照。设置中选择纸色、字号、横竖排与简繁经文。每品读完后可标记完成，并记录自己的体会。</p><p>笔记与进度仅存于当前浏览器，和易经站分别保存，不自动跨设备同步。设置中可导出 JSON 备份，在另一设备导入；清理浏览器数据之前先备份。</p>'+
+    '<h2>阅读与记录</h2><p>逐段模式下，点击经文或「看白话」展开完整译文；译文下方的「阅读提示」可按需展开；空格、右方向键前进，左方向键返回。可用段落目录直接跳转，也可切换通篇对照。设置中选择纸色、字号、横竖排与简繁经文。每品读完后可标记完成，并记录自己的体会。</p><p>笔记与进度仅存于当前浏览器，和易经站分别保存，不自动跨设备同步。设置中可导出 JSON 备份，在另一设备导入；清理浏览器数据之前先备份。</p>'+
     '<h2>致谢</h2><p>基础阅读交互与样式源自 <a href="https://github.com/Redwallen/liaofan-sizun" target="_blank" rel="noopener noreferrer">Redwallen / liaofan-sizun</a>，本版在 Sunhow 易经阅读器基础上改造，保留 MIT 许可。古代经文属于公有领域，电子转录出处与新增注解授权见 SOURCES.md。</p></div><a class="btn primary" href="#/read/0/0">开始阅读第一品 →</a>';
   }
 
@@ -568,7 +568,7 @@
               '<div class="insight-card"><span class="ilabel">阅读线索</span>' + escapeHtml(sec.insight) + '</div></section>';
     }
 
-    html += '<div class="source-note">逐段注解为 AI 辅助整理 · <a href="' + escapeAttr(sec.source) + '" target="_blank" rel="noopener noreferrer">核对本品原文 ↗</a></div>';
+    html += '<div class="source-note">白话译文与阅读提示为 AI 辅助整理 · <a href="' + escapeAttr(sec.source) + '" target="_blank" rel="noopener noreferrer">核对本品原文 ↗</a></div>';
     var before = neighborSection(ci, si, -1), after = neighborSection(ci, si, 1);
     html += '<nav class="gua-neighbors" aria-label="相邻品">' + (before ? '<a href="#/read/'+before.ci+'/'+before.si+'">← '+escapeHtml(before.sec.name)+'品</a>':'<span>全书起点</span>') + '<a href="#/">十三品目录</a>' + (after ? '<a href="#/read/'+after.ci+'/'+after.si+'">'+escapeHtml(after.sec.name)+'品 →</a>':'<span>全书终章</span>') + '</nav>';
 
@@ -581,7 +581,7 @@
     html += '</div>';
     view.innerHTML = html;
 
-    $('#passageSelect').addEventListener('change', function(e) { pr.pos = Number(e.target.value); touch(pr); persistProgress(); route(); if (state.mode === 'flow') { var selected = $('[data-pair="'+pr.pos+'"]'); if(selected) selected.scrollIntoView({block:'center',behavior:'smooth'}); } });
+    $('#passageSelect').addEventListener('change', function(e) { pr.pos = Number(e.target.value); touch(pr); persistProgress(); route(); if (state.mode === 'flow') { var selected = $('[data-pair="'+pr.pos+'"]'); if(selected) selected.scrollIntoView({block:'start',behavior:'smooth'}); } });
 
     // 恢复笔记
     var ta = $('#myNote');
@@ -603,6 +603,11 @@
         })();
       });
     }
+  }
+
+  function renderTranslation(pair) {
+    return '<span class="tlabel">白话译文</span><div class="plain-translation">' + escapeHtml(pair.trans) + '</div>' +
+      (pair.annotation ? '<details class="reading-tip"><summary>阅读提示 · 背景与解释</summary><div>' + escapeHtml(pair.annotation) + '</div></details>' : '');
   }
 
   function renderFocus(sec, pr, allRevealed, defaultShown) {
@@ -631,9 +636,9 @@
     var shown = pr.revealed[pos] || defaultShown;
     html += '<div class="focus-body">';
     html += '<div class="passage-label">' + escapeHtml(pair.label) + ' <span>' + (pos + 1) + ' / ' + sec.pairs.length + '</span></div>';
-    html += '<p class="orig-line" tabindex="0" role="button" aria-label="展开本段注解" id="focusOrig">' + decorate(pair.orig, sec.notes) + '</p>';
+    html += '<p class="orig-line" tabindex="0" role="button" aria-label="展开本段白话" id="focusOrig">' + decorate(pair.orig, sec.notes) + '</p>';
     html += '<div class="trans-box' + (shown ? ' reveal' : '') + '" id="focusTrans"' + (shown ? '' : ' hidden') + '>' +
-            '<span class="tlabel">逐段注解</span>' + escapeHtml(pair.trans) + '</div>';
+            renderTranslation(pair) + '</div>';
     html += '</div>';
 
     html += '</div>';
@@ -658,7 +663,7 @@
         html += '<a class="btn small primary" href="#/">回到目录</a>';
       }
     } else if (!shown) {
-      html += '<button class="btn small primary" id="revealBtn">看注解</button>';
+      html += '<button class="btn small primary" id="revealBtn">看白话</button>';
     } else if (pos < sec.pairs.length - 1) {
       html += '<button class="btn small primary" id="nextPair">下一段 →</button>';
     } else {
@@ -666,7 +671,7 @@
     }
     var tip = finished
       ? (nextS ? '空格 → 下一品' : '这已经是全书最后一品')
-      : '点原文也能显示注解 · 空格 → 下一段';
+      : '点原文也能显示白话 · 空格 → 下一段';
     html += '<span class="tip">' + tip + '</span>';
     html += '</div></div>';
     return html;
@@ -678,9 +683,9 @@
       var shown = pr.revealed[i] || defaultShown;
       html += '<div class="pair' + (shown ? ' opened' : '') + '" data-pair="' + i + '">';
       html += '<div class="passage-label">' + escapeHtml(pair.label) + '</div>';
-      html += '<p class="orig-line" tabindex="0" role="button" aria-label="切换本段注解">' + decorate(pair.orig, sec.notes) + '</p>';
-      html += '<div class="pair-click-hint">点击这一段，看学习注解</div>';
-      html += '<div class="trans-box reveal"><span class="tlabel">逐段注解</span>' + escapeHtml(pair.trans) + '</div>';
+      html += '<p class="orig-line" tabindex="0" role="button" aria-label="切换本段白话">' + decorate(pair.orig, sec.notes) + '</p>';
+      html += '<div class="pair-click-hint">点击这一段，看白话译文</div>';
+      html += '<div class="trans-box reveal">' + renderTranslation(pair) + '</div>';
       html += '</div>';
     });
     html += '</div>';
@@ -781,7 +786,7 @@
           title: sec.title,
           orig: sec.pairs.map(function (p) { return p.orig + ' ' + p.traditional; }).join(''),
           trans: sec.pairs.map(function (p) { return p.trans; }).join(' '),
-          notes: (sec.notes || []).map(function (n) { return n.term + '：' + n.explain; }).join(' ')
+          notes: (sec.notes || []).map(function (n) { return n.term + '：' + n.explain; }).join(' ') + ' ' + sec.pairs.map(function(p){return p.annotation || '';}).join(' ')
         });
       });
     });
@@ -945,7 +950,7 @@
         return;
       }
 
-      // 逐句：看注解 / 上下句
+      // 逐句：看白话 / 上下句
       if ((t.closest('#revealBtn') || t.closest('#focusOrig')) && state.reader) {
         focusReveal();
         return;
@@ -1053,7 +1058,7 @@
       }
     });
 
-    // 手机滑动：左滑下一段（先展开注解），右滑上一段
+    // 手机滑动：左滑下一段（先展开白话），右滑上一段
     var touchStart = null;
     view.addEventListener('touchstart', function (e) {
       if (!state.reader || state.mode !== 'focus' || !/^#\/read\//.test(location.hash)) { touchStart = null; return; }

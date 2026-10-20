@@ -1,7 +1,7 @@
 /* Offline cache is isolated by repository path, including on shared GitHub Pages origins. */
 const SCOPE = new URL(self.registration.scope).pathname;
 const PREFIX = 'dizang:' + SCOPE + ':';
-const VERSION = '5ae38309cf6331';
+const VERSION = 'd6243a728ee275';
 const CACHE = PREFIX + VERSION;
 const ASSETS = ['./','./index.html','./style.css','./dizang.css','./config.js','./app.js','./book.js','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-maskable-512.png','./apple-touch-icon.png','./favicon-32.png'];
 self.addEventListener('install', event => {

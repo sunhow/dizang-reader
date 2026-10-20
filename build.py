@@ -14,9 +14,10 @@ for n,ch in enumerate(chapters,1):
  assert len(ch['paragraphs'])==expected[n-1]
  pairs=[]
  for i,p in enumerate(ch['paragraphs'],1):
-  assert all(isinstance(p[k],str) and p[k].strip() for k in ['original','traditional','label','annotation'])
+  assert all(isinstance(p[k],str) and p[k].strip() for k in ['original','traditional','label','annotation','translation'])
   assert hashlib.sha256(p['traditional'].encode()).hexdigest()==p['sourceHash'],f'Original source changed at {n}.{i}; review provenance before updating hash.'
-  pairs.append({'orig':p['original'],'traditional':p['traditional'],'trans':p['annotation'],'label':p['label'],'number':i})
+  assert p['translation'] != p['annotation'], f'Translation is still only an annotation at {n}.{i}'
+  pairs.append({'orig':p['original'],'traditional':p['traditional'],'trans':p['translation'],'annotation':p['annotation'],'label':p['label'],'number':i})
  corpus=''.join(p['orig'] for p in pairs)
  notes=[x for x in glossary if x['term'] in corpus]
  sec={'id':f'pin-{n:02}','number':n,'name':ch['name'],'title':ch['title'],'theme':ch['theme'],'intro':ch['intro'],'insight':ch['insight'],'source':ch['source'],'pairs':pairs,'notes':notes}
@@ -24,4 +25,4 @@ for n,ch in enumerate(chapters,1):
  book['chapters'][ci]['sections'].append(sec)
 assert sum(len(s['pairs']) for c in book['chapters'] for s in c['sections'])==153
 (ROOT/'book.js').write_text('window.BOOK = '+json.dumps(book,ensure_ascii=False,separators=(',',':'))+';\n')
-print('Validated 13 chapters, 153 individually annotated paragraphs, source hashes and 3 volumes.')
+print('Validated 13 chapters, 153 complete vernacular translations with separate reading notes, source hashes and 3 volumes.')
