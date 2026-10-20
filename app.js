@@ -184,9 +184,18 @@
   function focusReveal() {
     var f = focusState(); if (!f) return;
     f.pr.revealed[f.pos] = true;
-    touch(f.pr); persistProgress(); route();
+    touch(f.pr); persistProgress();
+    // Reveal in place; rebuilding the route would reset the scroll position.
     var explanation = $('#focusTrans');
-    if (explanation && explanation.getBoundingClientRect().top > window.innerHeight - 120) explanation.scrollIntoView({behavior:'smooth',block:'start'});
+    if (explanation) {
+      explanation.hidden = false;
+      explanation.classList.add('reveal');
+    }
+    var revealButton = $('#revealBtn');
+    if (revealButton) {
+      revealButton.id = 'nextPair';
+      revealButton.textContent = f.pos < f.sec.pairs.length - 1 ? '下一段 →' : '读完了';
+    }
   }
   function focusNext() {
     var f = focusState(); if (!f) return;

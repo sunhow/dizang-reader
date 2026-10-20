@@ -48,3 +48,6 @@
 .trans-box{scroll-margin-top:90px}
 @media(max-width:720px){.plain-translation{font-size:calc(var(--reading-size) - 3px);line-height:2}.reading-tip{font-size:12px}.reading-tip summary{font-size:11px;min-height:42px;line-height:42px}.trans-box{scroll-margin-top:76px}}
 @media print{.plain-translation{font-size:14px}.reading-tip>div{display:block}}
+
+/* Expanding a translation must not move the reading position. */
+body.focus-mode{overflow-anchor:none}
